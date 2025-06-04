@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibeify – Music Player</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Header -->
+<header class="p-3 text-bg-dark">
+  <div class="container d-flex align-items-center justify-content-between">
+    
+    <!-- 🎵 Vibeify Logo -->
+    <a href="/" class="d-flex align-items-center text-white text-decoration-none logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" width="80" height="80">
+        <rect width="300" height="100" fill="#282828" />
+        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="64" fill="#FFD700">Vibeify</text>
+        <path d="M50 80 Q70 50, 90 80 T130 80" stroke="#FFD700" stroke-width="6" fill="none" />
+      </svg>
+    </a>
+
+    <!-- 🔍 Search + Auth Buttons Wrapper -->
+    <div class="d-flex align-items-center flex-grow-1 ms-3">
+      
+      <!-- Search Bar -->
+      <form class="flex-grow-1 me-3" role="search">
+        <input type="search" class="form-control search-bar" placeholder="🔍 Search..." />
+      </form>
+
+      <!-- 🔐 Auth Buttons -->
+      <div id="auth-buttons" class="d-flex align-items-center gap-2">
+        <!-- Firebase will inject login/signup or logout -->
+      </div>
+
+    </div>
+  </div>
+</header>
+
+
+  <!-- Sidebar + Content -->
+  <div class="layout-wrapper">
+    <nav class="sidebar">
+      <h3>Browse</h3>
+      <ul class="menu">
+        <li><a href="#">New Releases</a></li>
+        <li><a href="#">Top Charts</a></li>
+        <li><a href="#">Top Playlists</a></li>
+        <li><a href="#">Top Artists</a></li>
+      </ul>
+      <h3>Library</h3>
+      <ul class="menu">
+        <li><a href="#"><i class="fa-solid fa-clock-rotate-left"></i> History</a></li>
+        <li><a href="#"><i class="fa-solid fa-music"></i> Liked Songs</a></li>
+        <li><a href="#"><i class="fa-solid fa-compact-disc"></i> Albums</a></li>
+        <li><a href="#"><i class="fa-solid fa-user"></i> Artists</a></li>
+      </ul>
+      <div class="new-playlist"><i class="fas fa-plus"></i> New Playlist</div>
+    </nav>
+    <main class="main-content">
+      <div id="welcome-message" class="welcome-banner text-white text-center my-4"></div>
+      <section class="featured-artists">
+        <h2>Featured Artists</h2>
+        <div class="artist-grid">
+          <div class="artist-card" data-artist="One Direction">
+            <img src="./images/artists/one_direction.jpg" alt="One Direction" />
+            <h5>One Direction</h5>
+          </div>
+          <div class="artist-card" data-artist="Maroon 5">
+            <img src="./images/artists/maroon_5.jpg" alt="Maroon 5" />
+            <h5>Maroon 5</h5>
+          </div>
+          <div class="artist-card" data-artist="Avicii">
+            <img src="./images/artists/avicii.jpg" alt="Avicii" />
+            <h5>Avicii</h5>
+          </div>
+          <div class="artist-card" data-artist="Chainsmokers">
+            <img src="./images/artists/chainsmokers.jpg" alt="Chainsmokers" />
+            <h5>Chainsmokers</h5>
+          </div>
+          <div class="artist-card" data-artist="Alan Walker">
+            <img src="./images/artists/alan_walker.jpg" alt="Alan Walker" />
+            <h5>Alan Walker</h5>
+          </div>
+          <div class="artist-card" data-artist="Other Artists">
+            <img src="./images/default-cover.png" alt="Other Artists" />
+            <h5>Other Artists</h5>
+          </div>
+        </div>
+      </section>
+
+      <div id="playlist" class="playlist"></div>
+      <div class="text-center my-4">
+        <button id="see-more-btn" class="btn btn-outline-light" style="display: none;">See More</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Bottom‑fixed Player -->
+  <div class="bottom-player">
+    <img src="/images/default-cover.png" alt="Cover" class="album-art" />
+    <div class="song-info">
+      <div class="song-title">Loading…</div>
+      <div class="song-artist">Unknown Artist</div>
+    </div>
+    <div class="controls">
+      <button class="btn prev-btn"><i class="fa-solid fa-backward"></i></button>
+      <button class="btn play-btn">
+        <i class="fa-solid fa-play play-icon"></i>
+        <i class="fa-solid fa-pause pause-icon" style="display:none"></i>
+      </button>
+      <button class="btn next-btn"><i class="fa-solid fa-forward"></i></button>
+    </div>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+    <div class="time-info">
+      <span id="current-time">0:00</span>
+      <span id="duration">0:00</span>
+    </div>
+    <div class="volume-control">
+      <i class="fa-solid fa-volume-up"></i>
+      <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+    </div>
+  </div>
+
+  <audio id="audio"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.5/dist/jsmediatags.min.js"></script>
+  <script>
+    const audio = document.getElementById('audio');
+    const volumeSlider = document.getElementById('volume-slider');
+
+    volumeSlider.addEventListener('input', () => {
+      audio.volume = volumeSlider.value;
+    });
+  </script>
+  <!-- Firebase Configuration -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAm6wCYDB8B-2XG4n9n8iwSUzNCPZiQOf4",
+      authDomain: "vibeify-ab6a8.firebaseapp.com",
+      projectId: "vibeify-ab6a8",
+      storageBucket: "vibeify-ab6a8.firebasestorage.app",
+      messagingSenderId: "541862008599",
+      appId: "1:541862008599:web:a8a65b0ab0a9a3ba43c952",
+      measurementId: "G-C6HNH4ZDN2"
+    };
+    firebase.initializeApp(firebaseConfig);
+   </script>
+   <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
