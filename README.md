@@ -1,9 +1,3 @@
-# Simple-Online-Music-Player
-
-Thanks for uploading your project. I’ve reviewed the contents of **Final Music Player.zip**, and here's a well-written and clear description you can use for your GitHub `README.md` file:
-
----
-
 # 🎵 Vibeify Music Player 🎶
 
 This is a simple yet stylish **web-based music player** built using **HTML, CSS, and JavaScript**. The goal of this project is to provide a smooth and responsive music playback experience with modern UI elements and dynamic interactions.
